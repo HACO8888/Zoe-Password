@@ -5,6 +5,11 @@ export const viewport = {
   initialScale: 1,
 };
 
+export const metadata = {
+  title: "密碼驗證系統"
+};
+
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-Hant">

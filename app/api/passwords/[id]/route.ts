@@ -1,4 +1,6 @@
-// app/api/passwords/[id]/route.ts
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { q } from "@/lib/db";
 
@@ -9,6 +11,12 @@ async function getId(params: P | Promise<P>) {
   const n = Number(id);
   if (!Number.isInteger(n)) throw new Error("invalid-id");
   return n;
+}
+
+function error(res: any, e: any, fallback = "server") {
+  console.error("DB_ERROR", e);
+  const msg = typeof e?.message === "string" ? e.message : fallback;
+  return NextResponse.json({ error: msg }, { status: 500 });
 }
 
 export async function GET(_req: Request, ctx: { params: P | Promise<P> }) {
@@ -24,7 +32,7 @@ export async function GET(_req: Request, ctx: { params: P | Promise<P> }) {
   } catch (e: any) {
     if (e?.message === "invalid-id")
       return NextResponse.json({ error: "invalid id" }, { status: 400 });
-    return NextResponse.json({ error: "server" }, { status: 500 });
+    return error(NextResponse, e);
   }
 }
 
@@ -44,23 +52,6 @@ export async function PUT(req: Request, ctx: { params: P | Promise<P> }) {
   } catch (e: any) {
     if (e?.message === "invalid-id")
       return NextResponse.json({ error: "invalid id" }, { status: 400 });
-    return NextResponse.json({ error: "server" }, { status: 500 });
+    return error(NextResponse, e);
   }
 }
-
-export async function DELETE(_req: Request, ctx: { params: P | Promise<P> }) {
-  try {
-    const id = await getId(ctx.params);
-    const r = await q("DELETE FROM passwords WHERE id=$1 RETURNING id", [id]);
-    if (!r.rowCount)
-      return NextResponse.json({ error: "not found" }, { status: 404 });
-    return NextResponse.json({ ok: true });
-  } catch (e: any) {
-    if (e?.message === "invalid-id")
-      return NextResponse.json({ error: "invalid id" }, { status: 400 });
-    return NextResponse.json({ error: "server" }, { status: 500 });
-  }
-}
-
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
