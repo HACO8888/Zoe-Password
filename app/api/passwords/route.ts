@@ -3,8 +3,9 @@ import { q } from "@/lib/db";
 
 export async function GET() {
   const r = await q(
-    "SELECT id, password, created_at FROM passwords ORDER BY id DESC"
+    "SELECT id, password, created_at FROM passwords ORDER BY (id=1) DESC, id ASC"
   );
+
   return NextResponse.json(r.rows);
 }
 

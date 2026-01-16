@@ -1,71 +1,90 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function AdminPage() {
+type Row = { id: number };
+
+export default function AdminHome() {
+  const [list, setList] = useState<Row[]>([]);
   const [pwd, setPwd] = useState("");
-  const [curr, setCurr] = useState<string | null>(null);
-  const [state, setState] = useState<"idle" | "saving" | "saved" | "err">("idle");
+  const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  useEffect(() => {
-    const f = async () => {
-      try {
-        const r = await fetch("/api/passwords/1", { cache: "no-store" });
-        if (!r.ok) throw new Error();
-        const d = await r.json();
-        setCurr(d.password);
-      } catch {
-        setCurr(null);
-      }
-    };
-    f();
-  }, []);
+  const load = async () => {
+    const r = await fetch("/api/passwords", { cache: "no-store" });
+    if (r.ok) {
+      const d = await r.json();
+      const list = d.map((x: any) => ({ id: x.id }));
+      list.sort((a: any, b: any) => (a.id === 1 ? -1 : b.id === 1 ? 1 : a.id - b.id));
+      setList(list);
+    }
+  };
 
-  const onSubmit = async (e: React.FormEvent) => {
+  useEffect(() => { load(); }, []);
+
+  const create = async (e: React.FormEvent) => {
     e.preventDefault();
-    setState("saving");
+    setMsg("");
+    setLoading(true);
     try {
-      const r = await fetch("/api/passwords/1", {
-        method: "PUT",
+      const r = await fetch("/api/passwords", {
+        method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ password: pwd }),
       });
       if (!r.ok) throw new Error();
+      const j = await r.json();
       setPwd("");
-      setState("saved");
-      const d = await fetch("/api/passwords/1", { cache: "no-store" });
-      if (d.ok) {
-        const j = await d.json();
-        setCurr(j.password);
-      }
+      setMsg(`已新增關卡 ${j.id}`);
+      await load();
     } catch {
-      setState("err");
+      setMsg("新增失敗");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <main className="main">
       <div className="card">
-        <h1 className="title">管理密碼（ID 1）</h1>
-        <p className="desc">{curr !== null ? `目前密碼：${curr}` : "目前密碼載入失敗"}</p>
-        <form className="form" onSubmit={onSubmit}>
+        <div className="row" style={{ marginBottom: 12 }}>
+          <h1 className="title-admin" style={{ margin: 0 }}>管理關卡</h1>
+          <button
+            className="btn"
+            type="button"
+            onClick={() => router.push("/")}
+            aria-label="返回題目選擇"
+          >
+            返回題目選擇
+          </button>
+        </div>
+
+        <p className="desc-admin">新增關卡或選擇關卡進行編輯</p>
+
+        <form className="form" onSubmit={create}>
           <input
             className="input"
             type="text"
             value={pwd}
             onChange={(e) => setPwd(e.target.value)}
-            placeholder="輸入新密碼"
+            placeholder="新關卡的初始密碼"
             autoComplete="off"
           />
-          <div className="row">
-            <a className="btn" href="/">返回首頁</a>
-            <button className="btn" type="submit" disabled={state === "saving"}>
-              {state === "saving" ? "更新中…" : "更新密碼"}
-            </button>
-          </div>
+          <button className="btn" type="submit" disabled={loading}>
+            {loading ? "新增中…" : "新增關卡"}
+          </button>
         </form>
-        {state === "saved" && <div className="msg ok">已更新</div>}
-        {state === "err" && <div className="msg err">更新失敗</div>}
+        {!!msg && <div className="msg">{msg}</div>}
+
+        <div style={{ marginTop: 20, display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill,minmax(140px,1fr))" }}>
+          {list.map((r) => (
+            <button key={r.id} className="btn" onClick={() => router.push(`/admin/${r.id}`)}>
+              關卡 {r.id}
+            </button>
+          ))}
+        </div>
       </div>
     </main>
   );

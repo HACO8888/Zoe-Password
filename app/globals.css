@@ -6,13 +6,21 @@
   --ok: #16a34a;
   --err: #dc2626;
   --focus: #2563eb;
-  --btn: #111827;
-  --btn-press: #0b1220;
   --border: #e5e7eb;
+
+  --radius: 14px;
+  --shadow: 0 8px 24px rgba(17, 24, 39, .06);
+
+  --fs-title: clamp(22px, 3vw, 28px);
+  --fs-body: clamp(14px, 2vw, 16px);
+
+  --h-touch: 48px;
+  --h-sm: 40px;
 }
 
 * {
   box-sizing: border-box;
+  user-select: none;
 }
 
 html,
@@ -24,7 +32,11 @@ body {
   margin: 0;
   background: linear-gradient(180deg, var(--bg), #eef2ff 40%, var(--bg) 100%);
   color: var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+}
+
+button {
+  cursor: pointer;
 }
 
 .main {
@@ -35,71 +47,84 @@ body {
 }
 
 .card {
-  width: min(700px, 92vw);
+  width: min(960px, 94vw);
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: clamp(20px, 4vw, 40px);
-  box-shadow: 0 10px 30px rgba(17, 24, 39, .06);
+  border-radius: 18px;
+  padding: clamp(18px, 3vw, 28px);
+  box-shadow: var(--shadow);
 }
 
 .title {
-  font-size: clamp(22px, 3.8vw, 34px);
-  font-weight: 700;
-  letter-spacing: .3px;
-  margin: 0 0 14px 0;
+  font-size: var(--fs-title);
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: .2px;
   text-align: center;
-  color: var(--text);
+}
+
+.title-admin {
+  font-size: var(--fs-title);
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: .2px;
 }
 
 .desc {
-  margin: 0 0 20px 0;
+  margin: 8px 0 18px;
   color: var(--muted);
+  font-size: var(--fs-body);
   text-align: center;
-  font-size: clamp(14px, 2.4vw, 16px);
+}
+
+.desc-admin {
+  margin: 8px 0 18px;
+  color: var(--muted);
+  font-size: var(--fs-body);
 }
 
 .form {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .input {
+  height: var(--h-touch);
   width: 100%;
-  font-size: clamp(18px, 2.8vw, 22px);
-  padding: 16px 18px;
-  border-radius: 14px;
+  padding: 0 14px;
+  font-size: 16px;
   border: 1px solid var(--border);
+  border-radius: var(--radius);
   background: #fff;
   color: var(--text);
   outline: none;
-  transition: box-shadow .15s ease, border-color .15s ease, transform .02s ease;
 }
 
 .input:focus {
   border-color: var(--focus);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--focus) 20%, transparent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .18);
+}
+
+.input--sm {
+  height: var(--h-sm);
+  font-size: 14px;
+  border-radius: 10px;
 }
 
 .btn {
-  width: 100%;
-  padding: 18px;
-  border: 0;
-  border-radius: 14px;
-  background: var(--btn);
+  height: var(--h-touch);
+  padding: 0 16px;
+  border: 1px solid #1f2937;
+  border-radius: var(--radius);
+  background: #1f2937;
   color: #fff;
-  font-size: clamp(18px, 2.8vw, 22px);
   font-weight: 700;
-  letter-spacing: .2px;
+  font-size: 16px;
   cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform .02s ease, filter .15s ease, background .15s ease, opacity .15s ease;
 }
 
 .btn:active {
-  transform: scale(.995);
-  background: var(--btn-press);
+  transform: scale(.99);
 }
 
 .btn[disabled] {
@@ -107,17 +132,56 @@ body {
   cursor: not-allowed;
 }
 
+.btn--outline {
+  background: #fff;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn--sm {
+  height: var(--h-sm);
+  font-size: 14px;
+  border-radius: 10px;
+  padding: 0 12px;
+}
+
+.btn--primary {
+  background: var(--focus);
+  border-color: var(--focus);
+  color: #fff;
+}
+
 .row {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .row {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+.gridList {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+}
+
+.pill {
+  height: var(--h-touch);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
 }
 
 .msg {
   margin-top: 8px;
-  text-align: center;
-  font-size: clamp(16px, 2.6vw, 20px);
   font-weight: 700;
+  text-align: center;
 }
 
 .msg.ok {
@@ -128,97 +192,93 @@ body {
   color: var(--err);
 }
 
-.hint {
-  text-align: center;
-  margin-top: 10px;
-  font-size: clamp(12px, 2.2vw, 14px);
-  color: var(--muted);
-}
-
-@media (min-width: 768px) {
-  .form {
-    gap: 16px;
-  }
-
-  .row {
-    grid-template-columns: 1fr 180px;
-  }
-}
-
-@media (orientation: landscape) and (max-height: 600px) {
-  .main {
-    padding: 2vw;
-  }
-
-  .card {
-    padding: clamp(16px, 3vw, 28px);
-  }
-}
-
-/* 其餘內容保留你現有的，下面是新增區塊 */
+/* 覆蓋層與作答鍵盤維持原本設計 */
 .overlay {
   position: fixed;
   inset: 0;
   background: radial-gradient(1200px 600px at 50% -10%, #e0f2fe 0%, #ffffff 50%, #ffffff 100%);
   display: grid;
   place-items: center;
-  z-index: 9999;
-  pointer-events: auto;
+  z-index: 50;
 }
 
 .unlockWrap {
   text-align: center;
-  transform: scale(0.9);
-  animation: pop 380ms cubic-bezier(.2, .9, .2, 1) forwards;
 }
 
 .unlockTitle {
   font-size: clamp(44px, 9vw, 100px);
   font-weight: 900;
-  letter-spacing: .8px;
-  color: #16a34a;
+  color: var(--ok);
 }
 
 .unlockSub {
-  margin-top: 10px;
-  font-size: clamp(16px, 3.2vw, 22px);
+  margin-top: 8px;
+  font-size: clamp(16px, 3vw, 22px);
   color: #374151;
 }
 
-@keyframes pop {
-  from {
-    transform: scale(0.9);
-    opacity: .2;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* 你的其他樣式保持不變，以下是新增 */
 .errorTitle {
   font-size: clamp(44px, 9vw, 100px);
   font-weight: 900;
-  letter-spacing: .8px;
   color: var(--err);
   text-align: center;
 }
 
 .retryBtn {
-  margin: 14px auto 0;
-  display: inline-block;
-  padding: 8px 14px;
-  font-size: clamp(14px, 2.6vw, 16px);
+  margin-top: 10px;
+  height: var(--h-sm);
+  padding: 0 14px;
   border-radius: 9999px;
   border: 1px solid var(--border);
   background: #fff;
-  color: var(--text);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  font-size: 14px;
 }
 
-.retryBtn:active {
+/* 題目頁數字鍵盤 */
+.pinDisplay {
+  height: 56px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  letter-spacing: .2em;
+}
+
+.keypad {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.key {
+  height: 56px;
+  border: 1px solid #000;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.key:active {
   transform: scale(.98);
+}
+
+.keyWide {
+  grid-column: span 3;
+}
+
+.keyDanger {
+  color: var(--err);
+  border-color: var(--err);
+  background: #fff5f5;
+}
+
+.keyPrimary {
+  background: var(--focus);
+  color: #fff;
+  border-color: var(--focus);
 }
