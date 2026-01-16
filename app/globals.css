@@ -238,7 +238,7 @@ button {
 /* 題目頁數字鍵盤 */
 .pinDisplay {
   height: 56px;
-  border: 1px solid var(--border);
+  border: 1px solid #000;
   border-radius: 12px;
   background: #fff;
   display: grid;
