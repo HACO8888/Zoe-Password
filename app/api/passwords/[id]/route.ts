@@ -61,3 +61,6 @@ export async function DELETE(_req: Request, ctx: { params: P | Promise<P> }) {
     return NextResponse.json({ error: "server" }, { status: 500 });
   }
 }
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";

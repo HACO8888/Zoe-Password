@@ -19,3 +19,6 @@ export async function POST(req: Request) {
   );
   return NextResponse.json(r.rows[0], { status: 201 });
 }
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
