@@ -1,26 +1,224 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f7f8fb;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --ok: #16a34a;
+  --err: #dc2626;
+  --focus: #2563eb;
+  --btn: #111827;
+  --btn-press: #0b1220;
+  --border: #e5e7eb;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: linear-gradient(180deg, var(--bg), #eef2ff 40%, var(--bg) 100%);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.main {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 4vw;
+}
+
+.card {
+  width: min(700px, 92vw);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: clamp(20px, 4vw, 40px);
+  box-shadow: 0 10px 30px rgba(17, 24, 39, .06);
+}
+
+.title {
+  font-size: clamp(22px, 3.8vw, 34px);
+  font-weight: 700;
+  letter-spacing: .3px;
+  margin: 0 0 14px 0;
+  text-align: center;
+  color: var(--text);
+}
+
+.desc {
+  margin: 0 0 20px 0;
+  color: var(--muted);
+  text-align: center;
+  font-size: clamp(14px, 2.4vw, 16px);
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+}
+
+.input {
+  width: 100%;
+  font-size: clamp(18px, 2.8vw, 22px);
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, transform .02s ease;
+}
+
+.input:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--focus) 20%, transparent);
+}
+
+.btn {
+  width: 100%;
+  padding: 18px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--btn);
+  color: #fff;
+  font-size: clamp(18px, 2.8vw, 22px);
+  font-weight: 700;
+  letter-spacing: .2px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .02s ease, filter .15s ease, background .15s ease, opacity .15s ease;
+}
+
+.btn:active {
+  transform: scale(.995);
+  background: var(--btn-press);
+}
+
+.btn[disabled] {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.msg {
+  margin-top: 8px;
+  text-align: center;
+  font-size: clamp(16px, 2.6vw, 20px);
+  font-weight: 700;
+}
+
+.msg.ok {
+  color: var(--ok);
+}
+
+.msg.err {
+  color: var(--err);
+}
+
+.hint {
+  text-align: center;
+  margin-top: 10px;
+  font-size: clamp(12px, 2.2vw, 14px);
+  color: var(--muted);
+}
+
+@media (min-width: 768px) {
+  .form {
+    gap: 16px;
+  }
+
+  .row {
+    grid-template-columns: 1fr 180px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .main {
+    padding: 2vw;
+  }
+
+  .card {
+    padding: clamp(16px, 3vw, 28px);
+  }
+}
+
+/* 其餘內容保留你現有的，下面是新增區塊 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(1200px 600px at 50% -10%, #e0f2fe 0%, #ffffff 50%, #ffffff 100%);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.unlockWrap {
+  text-align: center;
+  transform: scale(0.9);
+  animation: pop 380ms cubic-bezier(.2, .9, .2, 1) forwards;
+}
+
+.unlockTitle {
+  font-size: clamp(44px, 9vw, 100px);
+  font-weight: 900;
+  letter-spacing: .8px;
+  color: #16a34a;
+}
+
+.unlockSub {
+  margin-top: 10px;
+  font-size: clamp(16px, 3.2vw, 22px);
+  color: #374151;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9);
+    opacity: .2;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 你的其他樣式保持不變，以下是新增 */
+.errorTitle {
+  font-size: clamp(44px, 9vw, 100px);
+  font-weight: 900;
+  letter-spacing: .8px;
+  color: var(--err);
+  text-align: center;
+}
+
+.retryBtn {
+  margin: 14px auto 0;
+  display: inline-block;
+  padding: 8px 14px;
+  font-size: clamp(14px, 2.6vw, 16px);
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.retryBtn:active {
+  transform: scale(.98);
 }
