@@ -34,10 +34,10 @@ export default function Page() {
     <main className="main">
       <div className="card">
         <div className="row" style={{ alignItems: "center" }}>
-          <h1 className="title">選擇題目</h1>
+          <h1 className="title-admin">選擇關卡</h1>
           <button className="btn btn--outline btn--sm" onClick={load}>重新整理</button>
         </div>
-        <p className="desc">點擊題目開始作答</p>
+        <p className="desc-admin">請選擇要進行闖關的關卡按鈕</p>
 
         {loading && <div className="msg">載入中…</div>}
         {!!err && <div className="msg err">{err}</div>}
@@ -45,8 +45,8 @@ export default function Page() {
         {!loading && !err && (
           <div className="gridList">
             {list.map((r) => (
-              <button key={r.id} className="pill" onClick={() => router.push(`/${r.id}`)}>
-                題目 {r.id}
+              <button key={r.id} className="pill cursor-pointer" onClick={() => router.push(`/${r.id}`)}>
+                關卡 {r.id}
               </button>
             ))}
           </div>

@@ -170,7 +170,7 @@ button {
 
 .pill {
   height: var(--h-touch);
-  border: 1px solid var(--border);
+  border: 1px solid #000;
   border-radius: 9999px;
   background: #fff;
   font-weight: 700;
