@@ -3,20 +3,20 @@ import { q } from "@/lib/db";
 
 export async function GET() {
   const r = await q(
-    "SELECT id, password, created_at FROM passwords ORDER BY (id=1) DESC, id ASC"
+    "SELECT id, title, password, created_at FROM passwords ORDER BY (id=1) DESC, id ASC"
   );
-
   return NextResponse.json(r.rows);
 }
 
 export async function POST(req: Request) {
   const b = await req.json();
+  const title = typeof b?.title === "string" ? b.title : "未命名關卡";
   if (!b?.password || typeof b.password !== "string") {
     return NextResponse.json({ error: "invalid password" }, { status: 400 });
   }
   const r = await q(
-    "INSERT INTO passwords (password) VALUES ($1) RETURNING id, password, created_at",
-    [b.password]
+    "INSERT INTO passwords (title, password) VALUES ($1, $2) RETURNING id, title, password, created_at",
+    [title, b.password]
   );
   return NextResponse.json(r.rows[0], { status: 201 });
 }

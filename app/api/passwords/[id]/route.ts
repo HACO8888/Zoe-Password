@@ -13,17 +13,11 @@ async function getId(params: P | Promise<P>) {
   return n;
 }
 
-function error(res: any, e: any, fallback = "server") {
-  console.error("DB_ERROR", e);
-  const msg = typeof e?.message === "string" ? e.message : fallback;
-  return NextResponse.json({ error: msg }, { status: 500 });
-}
-
 export async function GET(_req: Request, ctx: { params: P | Promise<P> }) {
   try {
     const id = await getId(ctx.params);
     const r = await q(
-      "SELECT id, password, created_at FROM passwords WHERE id=$1",
+      "SELECT id, title, password, created_at FROM passwords WHERE id=$1",
       [id]
     );
     if (!r.rowCount)
@@ -32,7 +26,7 @@ export async function GET(_req: Request, ctx: { params: P | Promise<P> }) {
   } catch (e: any) {
     if (e?.message === "invalid-id")
       return NextResponse.json({ error: "invalid id" }, { status: 400 });
-    return error(NextResponse, e);
+    return NextResponse.json({ error: "server" }, { status: 500 });
   }
 }
 
@@ -40,11 +34,25 @@ export async function PUT(req: Request, ctx: { params: P | Promise<P> }) {
   try {
     const id = await getId(ctx.params);
     const b = await req.json();
-    if (typeof b?.password !== "string")
-      return NextResponse.json({ error: "invalid password" }, { status: 400 });
+    const fields: string[] = [];
+    const values: any[] = [];
+    let i = 1;
+    if (typeof b?.title === "string") {
+      fields.push(`title=$${i++}`);
+      values.push(b.title);
+    }
+    if (typeof b?.password === "string") {
+      fields.push(`password=$${i++}`);
+      values.push(b.password);
+    }
+    if (!fields.length)
+      return NextResponse.json({ error: "no fields" }, { status: 400 });
+    values.push(id);
     const r = await q(
-      "UPDATE passwords SET password=$1 WHERE id=$2 RETURNING id, password, created_at",
-      [b.password, id]
+      `UPDATE passwords SET ${fields.join(
+        ","
+      )} WHERE id=$${i} RETURNING id, title, password, created_at`,
+      values
     );
     if (!r.rowCount)
       return NextResponse.json({ error: "not found" }, { status: 404 });
@@ -52,6 +60,6 @@ export async function PUT(req: Request, ctx: { params: P | Promise<P> }) {
   } catch (e: any) {
     if (e?.message === "invalid-id")
       return NextResponse.json({ error: "invalid id" }, { status: 400 });
-    return error(NextResponse, e);
+    return NextResponse.json({ error: "server" }, { status: 500 });
   }
 }

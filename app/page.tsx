@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type Row = { id: number };
+type Row = { id: number; title: string };
 
 export default function Page() {
   const [list, setList] = useState<Row[]>([]);
@@ -18,8 +18,11 @@ export default function Page() {
       const r = await fetch("/api/passwords", { cache: "no-store" });
       if (!r.ok) throw new Error();
       const data = await r.json();
-      const list = data.map((x: any) => ({ id: x.id }));
-      list.sort((a: any, b: any) => (a.id === 1 ? -1 : b.id === 1 ? 1 : a.id - b.id));
+      const list: Row[] = data.map((x: any) => ({
+        id: x.id,
+        title: String(x.title || `關卡 ${x.id}`)
+      }));
+      list.sort((a, b) => (a.id === 1 ? -1 : b.id === 1 ? 1 : a.id - b.id));
       setList(list);
     } catch {
       setErr("讀取失敗");
@@ -45,8 +48,12 @@ export default function Page() {
         {!loading && !err && (
           <div className="gridList">
             {list.map((r) => (
-              <button key={r.id} className="pill cursor-pointer" onClick={() => router.push(`/${r.id}`)}>
-                關卡 {r.id}
+              <button
+                key={r.id}
+                className="pill cursor-pointer"
+                onClick={() => router.push(`/${r.id}`)}
+              >
+                {r.title || `關卡 ${r.id}`}
               </button>
             ))}
           </div>

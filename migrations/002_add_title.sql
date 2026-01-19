@@ -1,0 +1,14 @@
+BEGIN;
+
+ALTER TABLE passwords
+  ADD COLUMN IF NOT EXISTS title TEXT;
+
+UPDATE passwords
+SET title = COALESCE(title, '關卡')
+WHERE title IS NULL;
+
+ALTER TABLE passwords
+  ALTER COLUMN title SET DEFAULT '關卡',
+  ALTER COLUMN title SET NOT NULL;
+
+COMMIT;

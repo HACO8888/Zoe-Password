@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "db:init": "node scripts/init.cjs"
+    "db:init": "node scripts/init.cjs",
+    "db:run": "node scripts/run-sql.cjs"
   },
   "dependencies": {
     "next": "16.1.2",

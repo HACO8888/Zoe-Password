@@ -1,13 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 export default function PuzzlePage() {
   const params = useParams();
   const id = String(params.id);
+  const [title, setTitle] = useState<string>("");
   const [pwd, setPwd] = useState("");
   const [state, setState] = useState<"idle" | "ok" | "err" | "loading">("idle");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const r = await fetch(`/api/passwords/${id}`, { cache: "no-store" });
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        setTitle(String(d.title || `關卡 ${id}`));
+      } catch {
+        setTitle(`關卡 ${id}`);
+      }
+    };
+    load();
+  }, [id]);
 
   const press = (v: string) => {
     if (state === "ok" || state === "err") return;
@@ -37,7 +52,7 @@ export default function PuzzlePage() {
   return (
     <main className="main">
       <div className="card" aria-hidden={state === "ok" || state === "err"}>
-        <h1 className="title">關卡編號： {id}</h1>
+        <h1 className="title">{title || `關卡 ${id}`}</h1>
         <p className="desc">請使用數字鍵盤輸入正確的密碼</p>
 
         <div className="pinDisplay">{pwd || "　"}</div>
