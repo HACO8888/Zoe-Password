@@ -52,7 +52,7 @@ export default function PuzzlePage() {
   return (
     <main className="main">
       <div className="card" aria-hidden={state === "ok" || state === "err"}>
-        <h1 className="title">{title || `關卡 ${id}`}</h1>
+        <h1 className="title">{title || " "}</h1>
         <p className="desc">請使用數字鍵盤輸入正確的密碼</p>
 
         <div className="pinDisplay">{pwd || "　"}</div>

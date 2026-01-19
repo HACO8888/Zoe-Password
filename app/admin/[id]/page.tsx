@@ -113,9 +113,9 @@ export default function AdminEdit() {
       <div className="card">
         <h1 className="title">編輯 關卡 {String(id)}</h1>
         <p className="desc">
-          {currTitle !== null ? `目前標題：${currTitle}` : "載入標題失敗"}
+          {currTitle !== null ? `目前標題：${currTitle}` : " "}
           <br />
-          {currPwd !== null ? `目前密碼：${currPwd}` : "載入密碼失敗"}
+          {currPwd !== null ? `目前密碼：${currPwd}` : " "}
         </p>
         <form className="form" onSubmit={onSubmit}>
           <input

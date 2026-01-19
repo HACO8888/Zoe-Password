@@ -53,7 +53,7 @@ export default function Page() {
                 className="pill cursor-pointer"
                 onClick={() => router.push(`/${r.id}`)}
               >
-                {r.title || `關卡 ${r.id}`}
+                {r.title || " "}
               </button>
             ))}
           </div>

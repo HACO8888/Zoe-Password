@@ -72,6 +72,7 @@ export default function AdminHome() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="關卡標題"
+            minLength={1}
             autoComplete="off"
           />
           <input
@@ -91,7 +92,7 @@ export default function AdminHome() {
         <div style={{ marginTop: 20, display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill,minmax(140px,1fr))" }}>
           {list.map((r) => (
             <button key={r.id} className="btn" onClick={() => router.push(`/admin/${r.id}`)}>
-              {(r.title) || `關卡 ${r.id}` || "未命名關卡"}
+              {(r.title) || " "}
             </button>
           ))}
         </div>
