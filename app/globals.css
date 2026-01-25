@@ -6,7 +6,7 @@
   --ok: #16a34a;
   --err: #dc2626;
   --focus: #2563eb;
-  --border: #e5e7eb;
+  --border: #111827;
 
   --radius: 14px;
   --shadow: 0 8px 24px rgba(17, 24, 39, .06);
@@ -127,12 +127,28 @@ button {
 .btn-admin {
   height: auto;
   padding: 0 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #1f2937;
   color: #fff;
   font-weight: 500;
   font-size: 14px;
   cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: none;
+  width: 100%;
+}
+
+@media (max-width: 860px) {
+  .btn-admin {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .btn-admin {
+    grid-column: span 1;
+  }
 }
 
 .btn:active {
