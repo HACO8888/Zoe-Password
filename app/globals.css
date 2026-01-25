@@ -124,6 +124,17 @@ button {
   cursor: pointer;
 }
 
+.btn-admin {
+  height: auto;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #1f2937;
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 .btn:active {
   transform: scale(.99);
 }
@@ -163,19 +174,47 @@ button {
   }
 }
 
+/* 容器：改用 flex-wrap 讓按鈕自動換行 */
 .gridList {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
 }
 
+/* 按鈕：依內容決定寬度、必要時在內部換行，不超出父層 */
 .pill {
-  height: var(--h-touch);
-  border: 1px solid #000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  height: var(--h-touch, 48px);
+  border: 1px solid var(--border, #e5e7eb);
   border-radius: 9999px;
   background: #fff;
+  color: var(--text, #111827);
   font-weight: 700;
   font-size: 15px;
+  cursor: pointer;
+
+  /* 關鍵：自適應寬度 + 不超出 + 內部可換行 */
+  width: auto;
+  max-width: 100%;
+  white-space: normal;
+  /* 允許換行 */
+  word-break: break-word;
+  /* 長字切行 */
+  overflow-wrap: anywhere;
+  /* 更積極的換行 */
+  flex: 0 1 auto;
+  /* 讓它根據內容縮放 */
+}
+
+.pill:active {
+  transform: scale(.98);
+}
+
+.pill:hover {
   cursor: pointer;
 }
 
@@ -282,4 +321,131 @@ button {
   background: var(--focus);
   color: #fff;
   border-color: var(--focus);
+}
+
+.descDanger {
+  margin: 6px 0 16px;
+  color: #dc2626;
+  /* 紅色 */
+  font-size: clamp(14px, 2vw, 16px);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ===== Admin: 統一的標頭、工具列、表單、清單 ===== */
+.adminHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.adminTitle {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: .2px;
+  font-size: clamp(20px, 2.6vw, 24px);
+}
+
+.adminToolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adminToolbar .btn {
+  height: 36px;
+  font-size: 14px;
+  border-radius: 10px;
+  padding: 0 12px;
+}
+
+.adminSection {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.adminForm {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr 1fr auto;
+}
+
+@media (max-width: 860px) {
+  .adminForm {
+    grid-template-columns: 1fr 1fr auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .adminForm {
+    grid-template-columns: 1fr;
+  }
+}
+
+.adminInput {
+  height: 40px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.adminList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.adminChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 14px;
+  width: auto;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.adminHint {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+/* Admin 詳細資訊（key-value 區塊） */
+.kv {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+}
+
+.kvRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.kvKey {
+  color: var(--muted);
+  min-width: 72px;
+  font-size: 14px;
+}
+
+.kvVal {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.kvPwd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
